@@ -10,7 +10,6 @@ struct Dimensions {
     std::string toString() const;
 };
 
-
 class Box {
    private:
     static int instanceCount;
