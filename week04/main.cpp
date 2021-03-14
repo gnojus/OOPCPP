@@ -8,7 +8,7 @@ using std::cin;
 
 int main() {
     Containers::Box box(Containers::Box::SMALL);
-    Containers::Dimensions item = {5, 8, 7};
+    Containers::Dimensions item(5, 8, 7);
     box.open();
     box.putItem(item);
     box.close();
