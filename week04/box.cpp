@@ -68,8 +68,8 @@ namespace Containers {
 
     Dimensions::Dimensions(int length, int width, int height) {
         this->setLength(length);
-        this->setLength(width);
-        this->setLength(height);
+        this->setWidth(width);
+        this->setHeight(height);
     }
 
     void Dimensions::setLength(int length) {

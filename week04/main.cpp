@@ -19,7 +19,7 @@ int main() {
     ss << box;
     ss >> boxFromStream;
     cout << "Reproduced box from stream: " << boxFromStream << '\n';
-    if (boxFromStream == box) {
+    if (boxFromStream.equals(box)) {
         cout << "And it equals to the original one!\n";
     }
 
