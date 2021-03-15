@@ -35,6 +35,8 @@ namespace Containers {
 
        public:
         static const Dimensions SMALL, MEDIUM, LARGE;
+
+        // Lazy initialization of the Box. init must be called before using.
         Box();
         Box(const Dimensions &size);
         Box(const Box &b);
