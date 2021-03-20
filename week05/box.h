@@ -1,48 +1,25 @@
 #ifndef BOX_H
 #define BOX_H
 
-#include <istream>
 #include <string>
 
+#include "dimensions.h"
+
 namespace Containers {
-
-    class Dimensions {
-       private:
-        int length, width, height;
-       public:
-        Dimensions();
-        Dimensions(int length, int width, int height);
-
-        void setLength(int length);
-        void setWidth(int width);
-        void setHeight(int height);
-
-        int getLength() const;
-        int getWidth() const;
-        int getHeight() const;
-
-        std::string toString() const;
-        friend std::ostream &operator<<(std::ostream &o, const Dimensions &d);
-        friend std::istream &operator>>(std::istream &o, Dimensions &d);
-        bool operator==(const Dimensions &d) const;
-        int volume() const;
-    };
-
     class Box {
        private:
-        class InnerBox;
-        InnerBox *inner;
+        class BoxImpl;
+        BoxImpl *impl;
 
        public:
-        static const Dimensions SMALL, MEDIUM, LARGE;
-
         // Lazy initialization of the Box. init must be called before using.
         Box();
         Box(const Dimensions &size);
         Box(const Box &b);
         ~Box();
-        Box& operator=(const Box &d);
-        void init(const Dimensions &size = Box::MEDIUM);
+        Box &operator=(const Box &b);
+        void init(const Dimensions &size);
+        int getId() const;
         void open();
         void close();
         bool isFull() const;
@@ -63,15 +40,15 @@ namespace Containers {
         Box &operator++();
 
         // Checks for complete box equality (size, item, is opened/close)..
-        bool equals(const Box &d) const;
+        bool equals(const Box &b) const;
 
         // Comparison operators compares only the volume of the boxes.
-        bool operator==(const Box &d) const;
-        bool operator!=(const Box &d) const;
-        bool operator<(const Box &d) const;
-        bool operator<=(const Box &d) const;
-        bool operator>(const Box &d) const;
-        bool operator>=(const Box &d) const;
+        bool operator==(const Box &b) const;
+        bool operator!=(const Box &b) const;
+        bool operator<(const Box &b) const;
+        bool operator<=(const Box &b) const;
+        bool operator>(const Box &b) const;
+        bool operator>=(const Box &b) const;
     };
 
 }

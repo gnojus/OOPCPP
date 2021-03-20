@@ -6,9 +6,13 @@
 using std::cin;
 using std::cout;
 
+const Containers::Dimensions SMALL = {10, 10, 10};
+const Containers::Dimensions MEDIUM = {20, 20, 10};
+const Containers::Dimensions LARGE = {30, 25, 20};
+
 int main() {
     try {
-        Containers::Box box(Containers::Box::SMALL);
+        Containers::Box box(SMALL);
         Containers::Dimensions item(5, 8, 7);
         box.open();
         box.putItem(item);
@@ -18,12 +22,6 @@ int main() {
         Containers::Box boxFromStream;
         std::stringstream ss;
         ss << box;
-        try {
-            ss >> boxFromStream;
-        } catch (const std::exception &e) {
-            cout << "Failed to read box: " << e.what() << '\n';
-        }
-        boxFromStream.init();
         ss >> boxFromStream;
 
         cout << "Reproduced box from stream: " << boxFromStream << '\n';
@@ -46,11 +44,11 @@ int main() {
 
         cout << std::endl;
 
-        cout << "Large box is " << (Containers::Box(Containers::Box::LARGE) > Containers::Box(Containers::Box::MEDIUM) ? "" : "not ") << "bigger than a small one.\n";
+        cout << "Large box is " << (Containers::Box(LARGE) > Containers::Box(MEDIUM) ? "" : "not ") << "bigger than a small one.\n";
 
         cout << std::endl;
 
-        Containers::Box boxes[] = {Containers::Box::SMALL, Containers::Box::MEDIUM, Containers::Box::LARGE, Containers::Box({50, 50, 50})};
+        Containers::Box boxes[] = {SMALL, MEDIUM, LARGE, Containers::Box({50, 50, 50})};
         const int length = sizeof(boxes) / sizeof(*boxes);
 
         boxes[0].open();
@@ -92,7 +90,6 @@ int main() {
 
         try {
             Containers::Box tmp;
-            tmp.init();
             cout << "Enter a box\n";
             cin >> tmp;
             cout << "Box entered: " << tmp << '\n';
@@ -103,7 +100,7 @@ int main() {
         delete flatBox;
     } catch (const std::exception &e) {
         cout << "Exception: " << e.what() << '\n';
-    } catch(...) {
+    } catch (...) {
         cout << "Unknown exception occurred\n";
     }
 }
