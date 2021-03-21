@@ -76,6 +76,6 @@ namespace Containers {
         friend Box;
     };
 
-};
+}
 
 #endif /* INTERNAL_H */
