@@ -55,11 +55,5 @@ int main(int argc, char **argv) {
     doctest::Context context;
     context.applyCommandLine(argc, argv);
 
-    int res = context.run();
-
-    if (context.shouldExit()) {
-        return res;
-    }
-
-    return 0;
+    return context.run();
 }

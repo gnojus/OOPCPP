@@ -25,6 +25,11 @@ build_tests: $(TESTS_TARGET)
 run_tests: build_tests
 	./$(TESTS_TARGET) --reporters=stderr,file --no-colors=true -o=$(LOGFILE)
 
+deploy: run_tests
+	git add --all
+	git commit -m "Deployment by make"
+	git push origin master
+
 rebuild: clean all
 
 doc:
