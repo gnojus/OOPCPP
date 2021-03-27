@@ -27,7 +27,7 @@ run_tests: build_tests
 
 deploy: run_tests
 	git add --all
-	git commit -m "Deployment by make"
+	git commit
 	git push origin master
 
 rebuild: clean all

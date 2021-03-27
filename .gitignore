@@ -1,2 +1,6 @@
 *.out
 *.o
+doc/html
+tests
+main
+test_logs.txt
