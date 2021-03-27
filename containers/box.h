@@ -54,12 +54,10 @@ namespace Containers {
          *  but strong exception safety is guaranteed. */
         friend std::istream &operator>>(std::istream &s, Box &b);
 
-        /** Post increment increments (sets to smallest unused) ID of this
-         *  object and returns old copy. */
+        /** Post increment increments ID of this object and returns old copy. */
         Box operator++(int);
 
-        /** Pre increment increments (sets to smallest unused) ID of this object
-         *  and returns this object. */
+        /** Pre increment increments ID of this object and returns this object */
         Box &operator++();
 
         /** Checks for complete box equality (size, item, is opened/close)..
@@ -75,6 +73,8 @@ namespace Containers {
         bool operator<=(const Box &b) const;
         bool operator>(const Box &b) const;
         bool operator>=(const Box &b) const;
+
+        static int getCurrentInstances();
     };
 
 }

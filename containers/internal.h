@@ -65,14 +65,16 @@ namespace Containers {
 
     class Box::BoxImpl {
        private:
-        static int instanceCount;
+        static int idCounter, instanceCounter;
         int ID;
         bool isOpen, hasItem;
         Dimensions size, item;
 
         BoxImpl(const Dimensions &size);
+        BoxImpl(const BoxImpl &b);
         ~BoxImpl();
 
+        friend std::istream &operator>>(std::istream &s, Box &b);
         friend Box;
     };
 

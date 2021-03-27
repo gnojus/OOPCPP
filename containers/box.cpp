@@ -11,17 +11,24 @@ namespace Containers {
     void validateDimensions(Dimensions dimensions);
     void checkInstance(void *instance, string filename, int line);
 
-    int Box::BoxImpl::instanceCount = 0;
+    int Box::BoxImpl::idCounter = 0;
+    int Box::BoxImpl::instanceCounter = 0;
 
-    Box::BoxImpl::BoxImpl(const Dimensions &size) : ID(this->instanceCount) {
+    Box::BoxImpl::BoxImpl(const Dimensions &size) : ID(this->idCounter) {
         validateDimensions(size);
         this->size = size;
         this->isOpen = false;
         this->hasItem = false;
-        ++(this->instanceCount);
+        ++Box::BoxImpl::idCounter;
+        ++Box::BoxImpl::instanceCounter;
+    }
+
+    Box::BoxImpl::BoxImpl(const BoxImpl &b) : ID(b.ID), isOpen(b.isOpen), hasItem(b.hasItem), size(b.size), item(b.item) {
+        ++Box::BoxImpl::instanceCounter;
     }
 
     Box::BoxImpl::~BoxImpl() {
+        --Box::BoxImpl::instanceCounter;
     }
 
     Box::Box() {
@@ -61,6 +68,11 @@ namespace Containers {
             throw std::logic_error(Errors::Box::WRONG_INITIALIZATION);
         }
         impl = new BoxImpl(size);
+    }
+
+    int Box::getId() const {
+        checkInstance(this->impl, __FILE__, __LINE__);
+        return this->impl->ID;
     }
 
     void Box::open() {
@@ -169,13 +181,13 @@ namespace Containers {
                 putItem = true;
             } else if (name == Serialization::Box::FIELD_ID) {
                 s >> ID;
-                // skip id for now
             } else {
                 throw std::logic_error(Errors::UNKNOWN_VALUE + " (" + name + ")");
             }
         } while (Serialization::readNextSeparator(s));
         s.flags(flags);
         Box tmp(size);
+        tmp.impl->ID = ID;
         tmp.open();
         if (putItem) {
             tmp.putItem(item);
@@ -190,15 +202,14 @@ namespace Containers {
     Box Box::operator++(int) {
         checkInstance(this->impl, __FILE__, __LINE__);
         Box copy = *this;
-        impl->ID = BoxImpl::instanceCount++;
+        ++(impl->ID);
         return copy;
     }
 
     Box &Box::operator++() {
         checkInstance(this->impl, __FILE__, __LINE__);
-        impl->ID = BoxImpl::instanceCount++;
+        ++(impl->ID);
         return *this;
-        Dimensions a, b;
     }
 
     bool Box::equals(const Box &b) const {
@@ -207,6 +218,7 @@ namespace Containers {
         equal &= impl->size == b.impl->size;
         equal &= this->isClosed() == b.isClosed();
         equal &= this->isFull() == b.isFull();
+        equal &= this->getId() == b.getId();
         if (this->isFull() && b.isFull()) {
             equal &= impl->item == b.impl->item;
         }
@@ -241,6 +253,10 @@ namespace Containers {
         return !(*this < b);
     }
 
+    int Box::getCurrentInstances() {
+        return BoxImpl::instanceCounter;
+    }
+
     void Serialization::readMark(std::istream &s, char mark) {
         char tmp;
         s >> tmp;
@@ -271,7 +287,7 @@ namespace Containers {
 
     void validateDimensions(Dimensions dimensions) {
         if (dimensions.getLength() <= 0 || dimensions.getWidth() <= 0 || dimensions.getHeight() <= 0) {
-            throw std::logic_error(Errors::Dimensions::INVALID);
+            throw std::invalid_argument(Errors::Dimensions::INVALID);
         }
     }
 
